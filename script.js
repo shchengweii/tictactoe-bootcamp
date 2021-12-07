@@ -1,5 +1,5 @@
 // Notes:
-// !!! reference from peers'code
+// !!! reference code
 // # to indicte for basic and base exercises
 // ### to indicate for Comfortable exercise
 // ##### to indicate for Comfortable exercise
@@ -14,16 +14,19 @@ const board = [
   ['', '', ''],
   ['', '', ''],
 ];
-
 // the element that contains the rows and squares
 let boardElement;
-
 // the element that contains the entire board
 // we can empty it out for convenience
 let boardContainer;
-
 // current player global starts at X
 let currentPlayer = 'X';
+
+// !!! create a gameInfo board
+const gameInfo = document.createElement('div');
+// # give a class for CSS purpose
+gameInfo.classList.add('messages');
+document.body.appendChild(gameInfo);
 
 // ===================================================
 //  Helper Functions
@@ -31,9 +34,9 @@ let currentPlayer = 'X';
 
 // # create a helper function for output to abstract complexity
 // # of DOM manipulation away from game logic
-// const output = (message) => {
-//   gameInfo.innerText = message;
-// };
+const output = (message) => {
+  gameInfo.innerText = message;
+};
 
 // completely rebuilds the entire board every time there's a click
 const buildBoard = (board) => {
@@ -41,13 +44,6 @@ const buildBoard = (board) => {
   boardContainer.innerHTML = '';
   boardElement = document.createElement('div');
   boardElement.classList.add('board');
-
-  // # create a container for gameInfo
-  const gameInfo = document.createElement('div');
-  // # give a class for CSS purpose
-  gameInfo.classList.add('gameInfo');
-  gameInfo.innerText = 'Please click the square to make your turn';
-  boardContainer.appendChild(gameInfo);
 
   // move through the board data array and create the
   // current state of the board
@@ -72,10 +68,9 @@ const buildBoard = (board) => {
       // set the click all over again
       // eslint-disable-next-line
       square.addEventListener('click', () => {
-        squareClick(gameInfo, i, j);
+        squareClick(i, j);
       });
     }
-
     // add a single row to the board
     boardContainer.appendChild(rowElement);
   }
@@ -94,111 +89,139 @@ const togglePlayer = () => {
   }
 };
 
-// // create squareClick function
-// const squareClick = (row, column) => {
-//   console.log('coordinates', row, column);
-
-//   // see if the clicked square has been clicked on before
-//   if (board[row][column] === '') {
-//     // alter the data array, set it to the current player
-//     board[row][column] = currentPlayer;
-//     console.log(currentPlayer);
-
-//     // refresh the creen with a new board
-//     // according to the array that was just changed
-//     buildBoard(board);
-
-//     // change the player
-//     togglePlayer();
-//   }
-// };
-
 // create click checkWin function
 const checkWin = (board) => {
+  // hardcode to write all the 15 conditions
+  // need to ensure the first element is not " " else will default return true
+
   // check every position
   // there is a conditional for all 15 win conditions
   // #1 (0,0) series - coordinates (0,0), (0,1), (0,2)
-  if (board[0][0] === board[0][1] && board[0][1] === board[0][2]) {
-    return;
+  if (
+    board[0][0] !== '' &&
+    board[0][0] === board[0][1] &&
+    board[0][1] === board[0][2]
+  ) {
+    return true;
   }
-
   // coordinates (0,0), (1,1), (2,2)
-  if (board[0][0] === board[1][1] && board[1][1] === board[2][2]) {
-    return;
+  if (
+    board[0][0] !== '' &&
+    board[0][0] === board[1][1] &&
+    board[1][1] === board[2][2]
+  ) {
+    return true;
   }
-
   // coordinates (0,0), (1,0), (2,0)
-  if (board[0][0] === board[1][0] && board[1][0] === board[2][0]) {
-    // X
-    // X
-    // X
-    return;
+  if (
+    board[0][0] !== '' &&
+    board[0][0] === board[1][0] &&
+    board[1][0] === board[2][0]
+  ) {
+    return true;
   }
   // #2 (0,1) series - coordinates (0,1), (1,1), (2,2)
-  if (board[0][1] === board[1][1] && board[0][1] === board[2][1]) {
-    return;
+  if (
+    board[0][1] !== '' &&
+    board[0][1] === board[1][1] &&
+    board[0][1] === board[2][1]
+  ) {
+    return true;
   }
   // #3 (0,2) series - coordinates (0,2), (0,1), (0,1)
-  if (board[0][2] === board[0][1] && board[0][1] === board[0][0]) {
-    return;
+  if (
+    board[0][2] !== '' &&
+    board[0][2] === board[0][1] &&
+    board[0][1] === board[0][0]
+  ) {
+    return true;
   }
-
   // coordinates (0,2), (1,2), (2,2)
-  if (board[0][2] === board[1][2] && board[1][2] === board[2][2]) {
-    return;
+  if (
+    board[0][2] !== '' &&
+    board[0][2] === board[1][2] &&
+    board[1][2] === board[2][2]
+  ) {
+    return true;
   }
-
   // coordinates (0,2), (1,1), (2,2)
-  if (board[0][2] === board[1][1] && board[1][1] === board[2][0]) {
-    return;
+  if (
+    board[0][2] !== '' &&
+    board[0][2] === board[1][1] &&
+    board[1][1] === board[2][0]
+  ) {
+    return true;
   }
-
   // #4 (1,0) coordinates (1,0), (1,1), (1,2)
-  if (board[1][0] === board[1][1] && board[1][1] === board[1][2]) {
-    return;
+  if (
+    board[1][0] !== '' &&
+    board[1][0] === board[1][1] &&
+    board[1][1] === board[1][2]
+  ) {
+    return true;
   }
-
   // #5 (1,1) series coordinates (0,1), (1,1), (2,1)
-  if (board[0][1] === board[1][1] && board[1][1] === board[2][1]) {
-    return;
+  if (
+    board[0][1] !== '' &&
+    board[0][1] === board[1][1] &&
+    board[1][1] === board[2][1]
+  ) {
+    return true;
   }
-
   // #6 (2,0) series coordinates (0,0), (1,0), (2,0)
-  if (board[0][0] === board[1][0] && board[1][0] === board[2][0]) {
-    return;
+  if (
+    board[0][0] !== '' &&
+    board[0][0] === board[1][0] &&
+    board[1][0] === board[2][0]
+  ) {
+    return true;
   }
-
   //  coordinates (2,0), (2,1), (2,2)
-  if (board[2][0] === board[2][1] && board[2][1] === board[2][2]) {
-    return;
+  if (
+    board[2][0] !== '' &&
+    board[2][0] === board[2][1] &&
+    board[2][1] === board[2][2]
+  ) {
+    return true;
   }
-
   //  coordinates (2,0), (1,1), (0,2)
-  if (board[2][0] === board[1][1] && board[1][1] === board[0][2]) {
-    return;
+  if (
+    board[2][0] !== '' &&
+    board[2][0] === board[1][1] &&
+    board[1][1] === board[0][2]
+  ) {
+    return true;
   }
-
   // #7 (2,1) series
   // coordinates (2,1), (1,1), (0,1)
-  if (board[2][1] === board[1][1] && board[1][1] === board[0][1]) {
-    return;
+  if (
+    board[2][1] !== '' &&
+    board[2][1] === board[1][1] &&
+    board[1][1] === board[0][1]
+  ) {
+    return true;
   }
-
   // #8 (2,2)
   // series coordinates (2,2), (1,1), (0,0)
-  if (board[2][2] === board[1][1] && board[1][1] === board[0][0]) {
-    return;
+  if (
+    board[2][2] !== '' &&
+    board[2][2] === board[1][1] &&
+    board[1][1] === board[0][0]
+  ) {
+    return true;
   }
-
   // coordinates (2,2), (0,2), (1,2)
-  if (board[2][2] === board[1][2] && board[1][2] === board[0][2]) {
-    return;
+  if (
+    board[2][2] !== '' &&
+    board[2][2] === board[1][2] &&
+    board[1][2] === board[0][2]
+  ) {
+    return true;
   }
 };
 
-const squareClick = (gameInfo, row, column) => {
+const squareClick = (row, column) => {
   console.log('coordinates', row, column);
-
   // see if the clicked square has been clicked on before
   if (board[row][column] === '') {
     // alter the data array, set it to the current player
@@ -207,14 +230,18 @@ const squareClick = (gameInfo, row, column) => {
     // refresh the creen with a new board
     // according to the array that was just changed
     buildBoard(board);
-    console.log(board);
 
-    // to add in the input when calling checkWin function
+    // check winner
+    checkWin(board);
+
+    // // change the player
+    // togglePlayer();
+
+    // console.log('test!!');
+    // console.log(roundWon);
     if (checkWin(board) === true) {
-      console.log('win liao!');
-      gameInfo.innerText = 'Game Over!!';
-      console.log(gameInfo);
-      // game over
+      console.log('finally win!');
+      output(`Game over! ${currentPlayer} wins!`);
     } else {
       togglePlayer();
     }
@@ -229,11 +256,10 @@ const squareClick = (gameInfo, row, column) => {
 const initGame = () => {
   boardContainer = document.createElement('div');
   document.body.appendChild(boardContainer);
-
   // build the board - right now it's empty
   buildBoard(board);
+  output('Please click the square to make your turn');
 };
 
 // initiate the game
-
 initGame();
